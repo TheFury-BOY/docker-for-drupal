@@ -1,0 +1,31 @@
+version: "3.2"
+services:
+  www:
+    image: "drupal:latest"
+    ports:
+      - "8080:80"
+    volumes: 
+      - ./host/modules:/var/www/html/modules
+      - ./host/profiles:/var/www/html/profiles
+      - ./host/sites:/var/www/html/sites
+      - ./host/themes:/var/www/html/themes
+    links:
+      - db
+    networks:
+      - default
+  db:
+    image: "postgres:latest"
+    ports:
+      - "3306:3306"
+    restart: always
+    environment: 
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: drupal
+    volumes:
+      - drupal-data:/var/lib/postgresql/data
+    networks: 
+      - default
+volumes:
+  drupal-data:
+
